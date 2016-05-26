@@ -1,0 +1,109 @@
+Pflichtpost v1.0 by kill0rz (C) 2014 - visit kill0rz.com
+
+Copyright
+#########
+
+Dieser Hack darf überall zum Download angeboten werden, auch mit veränderten Dateien. Es muss aber immer dieser Copyrightvermerk enthalten sein!
+Veränderungen sind zu kennzeichnen und in der jeweiligen Installationsanleitung zu vermerken.
+Der Download darf ausschließlich kostenfrei angeboten werden.
+Des Weiteren ist es Seiten, die keine Registrierung mehr zulassen, ausdrücklich untersagt, den Download anzubieten (Sprich: Wer diesen Download anbieten will, muss es auch allen Usern ermöglichen, diesen herunterzuladen!)!
+
+Beschreibung
+############
+
+Mit diesem Hack ist es möglich, User unabhängig von der aufgerufenen Seite auf einen Post zwingend zu lenken.
+Nachdem der User den Post gesehen hat, kann er das Forum wieder normal nutzen.
+
+Die Administration des Hacks erfolgt über die pflichtpost.php im Forum, nicht im ACP.
+
+Getestet mit und geschrieben für WBB2.3.6pl2.
+
+
+Installationszeit
+#################
+
+5min
+
+Changelog
+#########
+
+v1.0 (25.07.2014)
+----
+Grundskript
+
+Demo
+####
+
+liegt bei
+
+
+
+Installtion
+###########
+
+Lade die alle Dateien in der Struktur von www/ in deinen Forenordner.
+
+
+Datei: global.php
+====== ----------
+
+#######
+Suche:#
+#######
+
+	?>
+
+###################
+Füge darüber ein:#
+###################
+
+	//Pflichtpost by kill0rz v1.0 25.07.2014 *Anfang*
+
+	$result = $db->unbuffered_query("SELECT * FROM bb".$n."_pflichtpost WHERE userid = '$wbbuserdata[userid]'");
+	while ($row = $db->fetch_array($result)){
+		$db->unbuffered_query("DELETE FROM bb".$n."_pflichtpost WHERE userid = '$wbbuserdata[userid]' AND postid = '".$row['postid']."'");
+		header("Location: ./thread.php?postid=".$row['postid']."#post".$row['postid']);
+	}
+
+	//Pflichtpost by kill0rz v1.0 25.07.2014 *Ende*
+	
+	
+	
+Führe nun folgenden SQL-Befehl im phpmyadmin aus (SQL-Abfrage-Funktion vom WBB2 nicht getestet):
+
+----
+
+CREATE TABLE IF NOT EXISTS `bb1_pflichtpost` (
+`EintragsID` int(11) NOT NULL,
+  `userid` int(11) NOT NULL,
+  `postid` int(11) NOT NULL
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+
+----
+
+Anpassen der Konfiguration:
+---------------------------
+
+Ab werk lässt das Script in der Administration nur den User mit der UserID 1 zu.
+Wenn du ändern möchtest, öffne die pflichtpost.php und suche folgende Zeile:
+
+if(!($wbbuserdata['userid'] == 1)){
+
+Ändere hier die 1 zu der gewünschten UserID.
+Sollen mehrere Nutzer das Script nutzen können, ändere die Zeile entsprechend nachstehendem Muster ab:
+
+if(!($wbbuserdata['userid'] == 1) or !($wbbuserdata['userid'] == 2) or !($wbbuserdata['userid'] == 3)){
+
+
+FERTIG!
+Nun können du und alle User das Script benutzen!
+
+Um einen Pflichtpost zu setzen, rufe als Administrator die ./pflichtpost.php auf, und füge die ID des Posts, der erzwungen werden soll, in das Feld ein.
+Wähle danach die Nutzer, denen der Post vorgesetzt werden soll und schicke die Form ab. Eine Meldung bestätigt den Erfolg.
+
+Viel Spaß bei der Verwendung,
+kill0rz
+http://kill0rz.com/
+
+Stand: 25.07.2014
